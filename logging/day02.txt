@@ -1,0 +1,53 @@
+1、在Ubuntu中安装pycharm
+2、安装python虚拟环境
+	Window 10平台：
+		pip install virtualenv
+		pip install virtualenvwrapper-win
+		设置WORK_HOME环境变量：
+			默认路径：C:\Users\admin\Envs
+			WORKON_HOME = D:\vritualenv\webenv
+	Ubuntu平台：
+		sudo pip install virtualenv
+		sudo pip install virtualenvwrapper
+		
+		打开~/.bashrc文件，在结尾添加两行：
+		export WORKON_HOME=$HOME/.virtualenvs
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+		
+		source /usr/local/bin/virtualenvwrapper.sh
+		然后执行
+		source ~/.bashrc
+		将设置在文件中的配置信息马上生效,而不需要经过重启。
+		所有的虚拟环境，都位于/home/.virtualenvs目录下
+
+	virtualenvwrapper操作
+		创建：mkvirtualenv [虚拟环境名称]
+		删除：rmvirtualenv [虚拟环境名称]
+		进入：workon [虚拟环境名称]
+		退出：deactivate
+
+3、在虚拟环境中安装Django
+	安装注意事项：
+		在虚拟环境下安装python包
+		进入虚拟环境，在终端输入：  pip install 包的名字  
+
+		注意：一定不要使用sudo pip ... ,这里是在虚拟环境中安装python包；
+		如果使用了sudo权限，python包会被安装在主机非虚拟环境下，在虚拟环境中找不到这个包
+4、在GitHub上创建项目开发仓库，使用git clone获取远程仓库内容到本地仓库会生成.git隐藏文件，之后每天任务结束时将当天的内容git push推送到远程仓库保存
+5、在pycharm中设置工作目录（与.git同级）并导入python虚拟环境
+6、创建Django项目：
+	django-admin startproject 项目名
+     创建应用：
+	python manage.py startapp 应用名
+     创建模型：
+	新建类，需要继承models.Model
+     生成迁移文件：
+	python manage.py makemigrations
+     执行迁移文件：
+	python manage.py migrate
+     创建管理员账号：
+	python manage.py createsuperuser
+     启动服务端：
+	python manage.py runserver ip:port
+7、进入shell命令向数据库添加测试内容
+	python manage.py shell
