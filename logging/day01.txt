@@ -1,1 +1,2 @@
 1、完成系统架构图
+2、分析业务需求编写数据字典并创建webmonitor_hostinfo业务信息表和webmonitor_monitordata采集数据信息表语句

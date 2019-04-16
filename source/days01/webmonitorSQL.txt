@@ -1,0 +1,36 @@
+CREATE TABLE `webmonitor_hostinfo` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '业务ID',
+  `AppName` char(20) NOT NULL COMMENT '业务名称',
+  `URL` char(100) NOT NULL COMMENT '探测URL',
+  `IDC` char(10) NOT NULL COMMENT '探测点',
+  `Alarmtype` char(10) NOT NULL COMMENT '告警类型',
+  `Alarmconditions` char(20) NOT NULL COMMENT '告警条件',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='业务信息表';
+
+
+CREATE TABLE `webmonitor_monitordata` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT '探测结果ID',
+  `FID` int(11) NOT NULL COMMENT '业务ID',
+  `NAMELOOKUP_TIME` double NOT NULL COMMENT 'DNS解析时间',
+  `CONNECT_TIME` double NOT NULL COMMENT '建立连接时间',
+  `PRETRANSFER_TIME` double NOT NULL COMMENT '准备传输时间',
+  `STARTTRANSFER_TIME` double NOT NULL COMMENT '开始传输时间',
+  `TOTAL_TIME` double NOT NULL COMMENT '传输总时间',
+  `HTTP_CODE` char(80) NOT NULL COMMENT 'HTTP状态或异常信息',
+  `SIZE_DOWNLOAD` int(6) NOT NULL COMMENT '下载数据包大小',
+  `HEADER_SIZE` smallint(6) NOT NULL COMMENT 'HTTP头大小',
+  `REQUEST_SIZE` smallint(6) NOT NULL COMMENT '请求包大小',
+  `CONTENT_LENGTH_DOWNLOAD` smallint(6) NOT NULL COMMENT '下载内容长度',
+  `SPEED_DOWNLOAD` int(6) NOT NULL COMMENT '下载速度',
+  `DATETIME` int(11) NOT NULL COMMENT '探测时间',
+  `MARK` enum('0','1') NOT NULL COMMENT '更新RRDTOOL标记',
+  PRIMARY KEY (`ID`),
+  KEY `FID` (`FID`),
+  KEY `DATETIME` (`DATETIME`),
+  KEY `HTTP_CODE` (`HTTP_CODE`),
+  CONSTRAINT `webmonitor_monitordata_ibfk_1` FOREIGN KEY (`FID`) REFERENCES `webmonitor_hostinfo` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=31061 DEFAULT CHARSET=utf8 COMMENT='采集数据信息表';
+
+
+
