@@ -1,0 +1,86 @@
+1、自定义后台管理
+	①后台显示相关设置
+	在应用的models.py模型类中使用 __str__(self) 方法指定在后台管理对应的类页面中显示的列
+	为每一列添加描述（起别名）：
+		def 自定义方法名(self):
+			return self.列名
+		自定义方法名.short_description = "描述（别名）"
+	②后台操作设置
+	在应用的admin.py中使用 admin.site.register(类名) 可将新建店模型类显示在后台窗口中
+	进阶：
+	新建管理类继承自 admin.ModelAdmin ，在类中设置显示列、过滤、搜索（包括模糊查询）、分页等功能
+	完成后需要将 admin.site.register(类名) 改为 admin.site.register(类名, 管理类名) 	
+	eg:
+		class HeroAdmin(admin.ModelAdmin):
+    			# 后台显示控制
+    			# 显示对象指定列 列名与模型中一致
+    			list_display = ['hname', 'hsex', 'hcontent']
+    			# 过滤规则 列名一致
+    			list_filter = ['name', 'gender']
+    			# 显示搜索字段 支持模糊查询
+    			search_fields = ['name', 'content']
+    			# 分页 每页显示个数
+    			list_per_page = 3
+
+		# 注册模型类
+		admin.site.register(Hero, HeroAdmin)
+
+	拓展：多个模型类可新建关联类继承自 admin.StackedInline 进行关联
+	eg：
+		class HeroInline(admin.StackedInline):
+    			model = Hero
+    			# 关联个数
+    			extra = 1	
+		在被关联的类中只需使用 inlines = [HeroInline，] 即可
+
+2、在项目的settings.py系统配置文件中的DATABASES设置MySQL：
+	'default': {
+        		'ENGINE': 'django.db.backends.mysql',
+        		'NAME': 'demo01db',
+        		'USER': 'root',
+        		'PASSWORD': '123456',
+        		# 'HOST': '',
+        		# 'PORT': '',
+    	}
+     然后需要先在MySQL数据库新建demo01db数据库， 再生成迁移文件并执行迁移文件即可
+			
+3、简单视图的使用：
+	①需要在系统配置文件urls.py中 先导入 from django.conf.urls import url, include
+	再在urlpatterns中添加URL路由 格式：url('应用名/', include(应用名.urls)),  eg：url('booktest/', include('booktest.urls'))
+	②在应用下新建urls.py 文件 在文件中 先导入 from django.conf.urls import url 和 from . import views
+	再编写urlpatterns 中路由 格式： url(r'自定义目录名（起提示作用）/$', 视图.方法名),  eg：url(r'booklist/$', views.list),
+	③在应用视图view.py下可导入 from django.http import HttpResponse 进行传值也可使用render传值
+
+4、使用模板：
+	①创建模板文件夹templates与manage.py文件同级
+	②配置模板目录 在settings.py中添加 os.path.join(BASE_DIR, 'templates')
+	③创建项目模板目录，创建模板
+		在应用的views.py中先导入from django.template import loader然后在方法中：
+    			加载模板 temp = loader.get_template()
+    			使用变量渲染模板 result = temp.render({})
+    			返回模板  return HttpResponse(result)
+	                也可使用render代替：
+		eg：         
+		def index(request):
+    			print("请求", request)
+    			# return HttpResponse("首页")
+   			# # 1、加载模板
+    			# indexpage = loader.get_template('booktest/index.html')
+    			# body = {"username": "ggb"}
+   			# # 2、使用变量渲染模板
+    			# result = indexpage.render(body)
+    			# # 3、返回模板
+   			# return HttpResponse(result)
+    			return render(request, 'booktest/index.html', {"username": "ggb"})
+
+5、去除硬编码
+	① 在应用urls.py添加app_name
+	② 在项目urls配置文件中 在include中添加命名空间
+	③ 在应用配置文件中给url设置名字
+	④ 在HTML中取出硬编码 {% url '命名空间:url名字' 参数 %}
+
+
+
+
+
+
